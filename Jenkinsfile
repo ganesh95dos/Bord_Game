@@ -1,13 +1,9 @@
-pipline{
+pipeline {
     agent any
-    envirment{
-        SONAR_HOME= tool "sonar"
-    }
-
-    stages{
-        stage{
-            steps{
-                echo "This is clone from git hub"
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
             }
         }
     }
