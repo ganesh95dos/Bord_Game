@@ -22,7 +22,7 @@ pipeline {
         
         stage('Sonar Qube Quality Gate Scan'){
             steps{
-                timeout(time:2, unit:"MINUTES")
+                timeout(time:2, unit:"MINUTE")
                 waitForQualityGate abortPipeline: false
             }
         }
