@@ -16,17 +16,19 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Quality Gate Scan') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {        // ✅ Correct block
-                    waitForQualityGate abortPipeline: false
-                }
-            }
-        }
+        
         stage('OWASP Dependency Check') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'dc'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+
+        stage('SonarQube Quality Gate Scan') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {        // ✅ Correct block
+                    waitForQualityGate abortPipeline: false
+                }
             }
         }
         stage('Trivy File System Scan') {
