@@ -1,0 +1,14 @@
+version: '3.0'
+
+services:
+  boardgame-app:
+    image: boardgame-app
+    container_name: boardgame-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9090:8080"  # Host:Container
+    # environment:
+    #   - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped

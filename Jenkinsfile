@@ -19,5 +19,25 @@ pipeline {
                 }
             }
         }
+        
+        stage('Sonar Qube Quality Gate Scan'){
+            steps{
+                timeout(time:2, unit:"MINUTES")
+                waitForQualityGate abortPipeline: false
+            }
+        }
+        
+        stage('OWAPS Dependancy Check'){
+            steps{
+                dependencyCheck additionalArguments:'--scan ./', odcInstallation:'dc'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml' 
+            }
+        }
+        
+        stage('Trivy File System Scan'){
+            steps {
+                sh 'trivy fs --format table -o trivy-fs-report.html .'  // moved inside steps block
+            }
+        }
     }
 }
