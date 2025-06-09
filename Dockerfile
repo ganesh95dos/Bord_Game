@@ -1,20 +1,27 @@
-# Stage 1: Build the application
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+# Start with a base Java image with JDK 17 (or your Java version)
+FROM maven:3.9.6-eclipse-temurin-17 
 
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy the built jar file into the container
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
+
+# Copy the source code
 COPY src ./src
 
-# ✅ Run tests here (by default, 'mvn package' runs tests)
+# Build the application (runs tests by default)
 RUN mvn clean package
 
-# Stage 2: Run the application
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+#COPY target/boardgame-listing-webapp.jar app.jar
+COPY target/*.jar app.jar
 
+#COPY --from=build /app/target/*.jar app.jar
+
+# Expose port your app listens on (usually 8080)
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Run the jar file
+ENTRYPOINT ["java","-jar","app.jar"]
