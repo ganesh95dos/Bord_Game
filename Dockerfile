@@ -1,6 +1,10 @@
 # Start with a base Java image with JDK 17 (or your Java version)
 FROM maven:3.9.6-eclipse-temurin-17 
 
+#For security issue
+RUN useradd -m appuser
+USER appuser
+
 # Set the working directory inside the container
 WORKDIR /app
 
