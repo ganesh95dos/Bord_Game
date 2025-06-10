@@ -26,14 +26,14 @@ pipeline {
 
         stage('SonarQube Quality Gate Scan') {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {        // ✅ Correct block
+                timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: false
                 }
             }
         }
         stage('Trivy File System Scan') {
             steps {
-                sh 'trivy fs --format table -o trivy-fs-report.html . || true'
+                sh 'trivy fs --format table -o trivy-fs-report.html .'
             }
         }
     }
