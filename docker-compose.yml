@@ -1,12 +1,12 @@
-version: "3"
+version: '3.8'
 
 services:
-  boardgame-app:
-    image: boardgame-app
-    container_name: boardgame-app-container
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "9090:9000"
-    environment:
-      - NODE_ENV=production
-      - PORT=9000
+      - "8090:8080"
+    container_name: boardgame-listing-webapp
     restart: unless-stopped
+
