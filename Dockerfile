@@ -1,31 +1,31 @@
-# Start with a base Java image with JDK 17 (or your Java version)
-FROM maven:3.9.6-eclipse-temurin-17 
+# Use Maven base image with JDK 17
+FROM maven:3.9.6-eclipse-temurin-17
 
-#For security issue
+# Create non-root user
 RUN useradd -m appuser
+
+# Set working directory and fix permissions before switching user
+WORKDIR /app
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
 USER appuser
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the built jar file into the container
-COPY pom.xml .
+# Copy pom and download dependencies
+COPY --chown=appuser:appuser pom.xml .
 RUN mvn dependency:go-offline
 
+# Copy source code
+COPY --chown=appuser:appuser src ./src
 
-# Copy the source code
-COPY src ./src
-
-# Build the application (runs tests by default)
+# Build the app
 RUN mvn clean package
 
-#COPY target/boardgame-listing-webapp.jar app.jar
-COPY target/*.jar app.jar
+# Copy JAR
+COPY --chown=appuser:appuser target/*.jar app.jar
 
-#COPY --from=build /app/target/*.jar app.jar
-
-# Expose port your app listens on (usually 8080)
+# Expose port
 EXPOSE 8080
 
-# Run the jar file
-ENTRYPOINT ["java","-jar","app.jar"]
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]
