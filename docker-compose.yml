@@ -5,7 +5,7 @@ services:
     image: boardgame-app
     container_name: boardgame-app-container
     ports:
-      - "9000:9000"
+      - "9090:9000"
     environment:
       - NODE_ENV=production
       - PORT=9000
