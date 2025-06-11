@@ -20,6 +20,8 @@ RUN mkdir -p target
 
 RUN mvn clean package
 
+RUN mv target/*.jar target/app.jar
+
 RUN find target -type f -exec chmod a-w {} \;
 
 EXPOSE 8080
