@@ -6,25 +6,29 @@ RUN useradd -m appuser
 
 # Set working directory and fix permissions before switching user
 WORKDIR /app
-RUN chown -R appuser:appuser /app
+
+# Copy pom.xml and set ownership
+COPY pom.xml .
+RUN chown appuser:appuser pom.xml && chmod a-w pom.xml
 
 # Switch to non-root user
 USER appuser
 
-# Copy pom and download dependencies
-COPY --chown=appuser:appuser pom.xml .
+# Download dependencies
 RUN mvn dependency:go-offline
 
-# Copy source code
+# Copy source code and lock down permissions
 COPY --chown=appuser:appuser src ./src
+RUN find ./src -type f -exec chmod a-w {} \;
+
 
 # Build the app
 RUN mvn clean package
 
-# Copy JAR
-#COPY --chown=appuser:appuser target/*.jar app.jar
+# Optionally make the entire target/ read-only
+RUN find target -type f -exec chmod a-w {} \;
 
-# Expose port
+# Expose application port
 EXPOSE 8080
 
 # Run the app
