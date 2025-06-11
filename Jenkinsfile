@@ -41,7 +41,7 @@ pipeline {
             steps { 
                 sh 'docker ps -a'
                 sh 'docker images'
-                sh 'docker-compose down'
+                sh 'docker-compose down bord-game2_app'
                 sh 'docker-compose up -d'
             }
         }
