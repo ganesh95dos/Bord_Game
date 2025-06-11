@@ -22,10 +22,10 @@ COPY --chown=appuser:appuser src ./src
 RUN mvn clean package
 
 # Copy JAR
-COPY --chown=appuser:appuser target/*.jar app.jar
+#COPY --chown=appuser:appuser target/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
 # Run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "target/app.jar"]
