@@ -41,7 +41,7 @@ pipeline {
             steps { 
                 sh 'docker-compose down'
                 sh 'docker container prune -f'
-                sh 'docker image'
+                sh 'docker images'
                 sh 'docker-compose up -d'
 
             }
