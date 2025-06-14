@@ -13,16 +13,14 @@ USER appuser
 RUN mvn dependency:go-offline
 
 COPY --chown=appuser:appuser src ./src
-RUN find ./src -type f -exec chmod a-w {} \;
 
-# Explicitly create target/ so Maven doesn't fail
-RUN mkdir -p target
-
-RUN mvn clean package
-
-RUN mv target/*.jar target/app.jar
-
-RUN find target -type f -exec chmod a-w {} \;
-
+# Build the application
+USER appuser
+RUN find ./src -type f -exec chmod a-w {} \; && \
+    mkdir -p target && \
+    mvn clean package && \
+    cp target/*.jar target/app.jar && \
+    chmod a-w target/app.jar
+    
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "target/app.jar"]
