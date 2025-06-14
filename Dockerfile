@@ -12,9 +12,8 @@ USER appuser
 
 RUN mvn dependency:go-offline
 
-COPY --chown=appuser:appuser src ./src
-# Remove write permissions from all files in ./src
-RUN find ./src -type f -exec chmod a-w {} \; && \
+# Copy source with correct ownership
+COPY --chown=appuser:appuser src ./src && find ./src -type f -exec chmod a-w {} \; && \
     find ./src -type d -exec chmod a-w {} \;
 
 # Build the application
