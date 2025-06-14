@@ -19,13 +19,13 @@ RUN mvn dependency:go-offline
 # Copy source with ownership
 COPY --chown=appuser:appuser src ./src
 
-# Remove write permissions, build app, and secure JAR — all in one layer
 RUN find ./src -type f -exec chmod a-w {} \; && \
     find ./src -type d -exec chmod a-w {} \; && \
     mkdir -p target && \
     mvn clean package && \
     cp target/*.jar target/app.jar && \
     chmod a-w target/app.jar
+
 
 # Expose port and set default startup command
 EXPOSE 8080
