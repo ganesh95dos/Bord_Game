@@ -16,13 +16,13 @@ USER appuser
 # Download Maven dependencies (cached if src changes)
 RUN mvn dependency:go-offline
 
-# Copy source with ownership and remove write permissions
+# Copy source with ownership
 COPY --chown=appuser:appuser src ./src
-RUN find ./src -type f -exec chmod a-w {} \; && \
-    find ./src -type d -exec chmod a-w {} \;
 
-# Build the application and secure the final JAR
-RUN mkdir -p target && \
+# Remove write permissions, build app, and secure JAR — all in one layer
+RUN find ./src -type f -exec chmod a-w {} \; && \
+    find ./src -type d -exec chmod a-w {} \; && \
+    mkdir -p target && \
     mvn clean package && \
     cp target/*.jar target/app.jar && \
     chmod a-w target/app.jar
